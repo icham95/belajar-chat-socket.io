@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Chat socket.io with express</title>
+	<style type="text/css">
+		form {
+			position: fixed;
+			bottom:0px;
+			width: 80%;
+			right: 0px;
+			background-color: grey;
+			padding: 20px;
+		}
+
+		input {
+			width: 70%;
+			float: left;
+			height: 30px;
+		}
+
+		button {
+			width: 100%;
+			float: left;
+			height: 37px;
+		}
+		#id {
+			margin-bottom: 100px;
+		}
+		#nama {
+			width: 20%;
+		}
+	</style>
+</head>
+<body>
+	<ul id="message"></ul>
+	
+	<form>
+		<input type="text" id="nama" placeholder="nama kamu">
+		<input type="text" id="text_box" placeholder="isi chat..">
+		<button> kirim </button>
+	</form>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="assets/js/jquery-2.2.3.min.js"></script>
+
+	<script>
+		var socket = io();
+		$('form').submit(function () {
+			var msg = {
+				nama: $('#nama').val(),
+				val: $('#text_box').val()
+			}
+			socket.emit('newMessage', msg);
+			$('#text_box').val('');
+			return false;
+		})
+
+		// tampil di front end
+		socket.on('newMessage', function (msg) {
+			var testing = msg.nama + ' : ' + msg.val
+			$('#message').append($('<li>').text(testing));
+		})
+
+	</script>
+</body>
+</html>
